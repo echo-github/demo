@@ -66,7 +66,7 @@
 							<div class="row jsv_fe_wrap">
 								<div class="col_1">Time*</div>
 								<div class="col_2"><span class="label_input_wrap time_selector_wrap">
-									<input class="input_text jsv_fe js_m_timepicker js_input js_data_item" data-jsv-type="time" type="time" min="11:30" max="22:30" step="15" name="time" data-error-tip="Please select time.|Invalid time or invalid time format.|You have chosen a time outside our opening hours (11:30 - 22:30)." id="reservation_time" disabled="disabled">
+									<input class="input_text jsv_fe js_m_timepicker js_input js_data_item" data-jsv-type="time" type="time" min="11:30" max="22:30" data-multi_time_area="true" data-time-area-array="11:30-14:30|18:00-22:30" step="15" name="time" data-error-tip="Please select time.|Invalid time or invalid time format.|You have chosen a time outside our revervation hours (11:30-14:30 and 18:00-22:30)." id="reservation_time" disabled="disabled">
 									<!--<label for="reservation_time">2014-01-09</label>-->
 									</span>
 									<div class="error_tip jsv_error_tip"></div>
@@ -223,7 +223,8 @@ jQuery(function(){
 	  $people_num_input.change(function () {
 		numChange();
 	  });
-		  
+		
+	$root.blur_validate();  
 
 
 	 $btn_submit.click(function(){
