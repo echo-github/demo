@@ -471,8 +471,8 @@ jQuery.fn.extend({
 
 /*
 <div class="jsv_fe_wrap">
-<input type="time" class="jsv_fe" data-jsv-type="time" min="11:30" max="21:30" data-error-tip="Please select time.|Invalid time.|Out of range."/>
-<input type="text" class="jsv_fe" data-jsv-type="time" min="11:30" max="21:30" data-error-tip="Please select time.|Invalid time.|Out of range."/>
+<input type="time" class="jsv_fe" data-jsv-type="time" min="11:30" max="21:30" data-multi_time_area="true" data-time-area-array="11:30-14:30|18:00-22:30"  data-error-tip="Please select time.|Invalid time.|Out of range."/>
+<input type="text" class="jsv_fe" data-jsv-type="time" min="11:30" max="21:30" data-multi_time_area="true" data-time-area-array="-14:30|18:00-" data-error-tip="Please select time.|Invalid time.|Out of range."/>
 <div class="jsv_error_tip"></div>
 </div>
 */
@@ -484,6 +484,7 @@ jQuery.fn.extend({
 		var $error_tip = $obj.closest('.jsv_fe_wrap').find('.jsv_error_tip');
 		var error_tip_set = $obj.attr('data-error-tip').split('|');
 		var result = false;
+		var multiTimeArea = $obj.attr('data-multi-time-area');//如果有多个时间区段 
 
 		var min_limit = (!!$obj.attr('min'))?true:false;
 		var max_limit = (!!$obj.attr('max'))?true:false;
@@ -521,44 +522,111 @@ jQuery.fn.extend({
 			$obj.closest('.jsv_fe_wrap').addClass('error');
 			result = false;
 		}
+		
+		function isInValidTimeArea(_time_area_){//传递一个数组作为允许的时段参数 例如： _time_area_ = [{'min':'11:30','max':'14:30'},{'min':'18:00','max':'22:30'}]
+		   	_time_area_ = _time_area_ || [{'min':'','max':''}];
+			var iLen = _time_area_.length;
+			
+			 if( iLen===1 ){//如果是单区段限制
+					var timeLimit_min = (_time_area_['min']!=='')?true:false;
+					var timeLimit_max = (_time_area_['max']!=='')?true:false;
+					
+					if( !timeLimit_min && !timeLimit_max ){//如果没有min max时段限制
+						setTrue();//匹配成功					
+					}else if( timeLimit_min && !timeLimit_max ){
+						if(_getMinutes_($obj.val())<_getMinutes_(_time_area_['min'])){
+						  setError(2);
+						}else{
+						  setTrue();
+						};
+					}else if( !timeLimit_min && timeLimit_max ){
+						if(_getMinutes_($obj.val())>_getMinutes_(_time_area_['max'])){
+						   setError(2);
+						}else{
+						   setTrue();
+						};
+					}else if( timeLimit_min && timeLimit_max ){
+						if(  _getMinutes_($obj.val())>=_getMinutes_(_time_area_['min'])  && _getMinutes_($obj.val())<=_getMinutes_(_time_area_['max'])   ){
+							setTrue();
+						}else{
+							setError(2);
+						};
+					};
+			 
+			 }else if(iLen>1){//如果是多区段限制
+			     var received_time_input = _getMinutes_( $obj.val() ); 
+				  				 
+				 function checkCellArea(num){
+					 var iAreaCell = num;
+					 
+					 if(!!_time_area_[iAreaCell]['min']  &&  !! _time_area_[iAreaCell]['max'] && (received_time_input >= _getMinutes_(_time_area_[iAreaCell]['min']) &&  received_time_input <= _getMinutes_(_time_area_[iAreaCell]['max'])) ){
+						  setTrue(); 
+					 }else if(!_time_area_[iAreaCell]['min'] && !!_time_area_[iAreaCell]['max'] && (received_time_input <= _getMinutes_(_time_area_[iAreaCell]['max']) )){
+						  setTrue(); 
+							 
+					 }else if(!!_time_area_[iAreaCell]['min'] && !_time_area_[iAreaCell]['max'] && (received_time_input >= _getMinutes_(_time_area_[iAreaCell]['min'])) ){
+						  setTrue(); 
+					 }else{
+						  if(iAreaCell===iLen-1){
+							 setError(2);
+						 }else{
+							 iAreaCell = iAreaCell + 1; 
+							 checkCellArea(iAreaCell);
+						 };	 
+					 };	
+					  				 					
+				 }
+				 
+				 checkCellArea(0);
+				 
+		   };
+
+			
+		}//end function isInValidTimeArea(_time_area_)
+		
+		
+		
 	
 		if($obj.val()===''||$obj.val()===undefined){//如果输入为空
 			setError(0);
-		}else if($obj.val().search(pattern_reg)===-1){//如果输入格式不对
+		}else if($obj.val().search(pattern_reg)===-1){//如果输入格式不对 
 			setError(1);
 		}else{//如果输入不为空 并且 输入格式正确			
-			if(checkValidTimeInput($obj.val())){//如果输入的是合法的时间
-				if( !min_limit && !max_limit ){
-					setTrue();//匹配成功
-				}else if( min_limit && !max_limit ){
-					if(_getMinutes_($obj.val())<_getMinutes_($obj.attr('min'))){
-					  setError(2);
-					}else{
-					  setTrue();
+			if(checkValidTimeInput($obj.val())){//如果输入的时间合法
+					var aTimeArea = [];
+						
+					if( $obj.attr('data-multi_time_area')==='true' ){
+						(function(){
+							var __a_temp_TimeArea = $obj.attr('data-time-area-array').split('|');
+							var len = __a_temp_TimeArea.length;
+													
+							for(var i = 0;i<len;i++){
+								var _area_ = __a_temp_TimeArea[i];
+								var min_time = ( !!(_area_.split('-')[0]) ) ? _area_.split('-')[0] : '';
+								var max_time = ( !!(_area_.split('-')[1]) ) ? _area_.split('-')[1] : '';								
+								aTimeArea.push({'min':min_time,'max':max_time});						
+							};
+						})();	
+											
+					}else if($obj.attr('data-multi_time_area')===undefined || $obj.attr('data-multi_time_area')==='false'){
+						(function(){
+								var min_time =  !!$obj.attr('min') ? $obj.attr('min') : '';
+								var max_time =  !!$obj.attr('max') ? $obj.attr('max') : '';
+								aTimeArea = [{'min':min_time,'max':max_time}];
+						})();					
 					};
-				}else if( !min_limit && max_limit ){
-					if(_getMinutes_($obj.val())>_getMinutes_($obj.attr('max'))){
-					   setError(2);
-					}else{
-					   setTrue();
-					};
-				}else if( min_limit && max_limit ){
-					if(  _getMinutes_($obj.val())>=_getMinutes_($obj.attr('min'))  && _getMinutes_($obj.val())<=_getMinutes_($obj.attr('max'))   ){
-					  setTrue();
-					}else{
-						setError(2);
-					};
-				};
-			}else{//如果输入的时间不合法				
+					
+					isInValidTimeArea(aTimeArea);
+										
+			}else{//如果输入的时间不合法					
 				setError(1);
 			};
+
 		}
 		
 	    return result;
 	}
 });
-
-
 
 
 //validate_fe_password
@@ -607,7 +675,7 @@ jQuery.fn.extend({
 		var len = $checkbox_obj.find('input.jsv_fe_checkbox').length;
 		
 		for(var i=0;i<len;i++){
-			if($checkbox_obj.find('input.jsv_fe_checkbox')[i].checked){checked_num++};//end if
+			if($checkbox_obj.find('input.jsv_fe_checkbox')[i].checked){checked_num++};
 		};//end for
 		
 		if(checked_num==0){
