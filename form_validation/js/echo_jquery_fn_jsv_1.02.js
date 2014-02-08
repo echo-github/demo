@@ -471,8 +471,8 @@ jQuery.fn.extend({
 
 /*
 <div class="jsv_fe_wrap">
-<input type="time" class="jsv_fe" data-jsv-type="time" min="11:30" max="21:30" data-multi_time_area="true" data-time-area-array="11:30-14:30|18:00-22:30"  data-error-tip="Please select time.|Invalid time.|Out of range."/>
-<input type="text" class="jsv_fe" data-jsv-type="time" min="11:30" max="21:30" data-multi_time_area="true" data-time-area-array="-14:30|18:00-" data-error-tip="Please select time.|Invalid time.|Out of range."/>
+<input type="time" class="jsv_fe" data-jsv-type="time" min="11:30" max="21:30" data-multi_time_area="true" data-time_area_array="11:30-14:30|18:00-22:30"  data-error-tip="Please select time.|Invalid time.|Out of range."/>
+<input type="text" class="jsv_fe" data-jsv-type="time" min="11:30" max="21:30" data-multi_time_area="true" data-time_area_array="-14:30|18:00-" data-error-tip="Please select time.|Invalid time.|Out of range."/>
 <div class="jsv_error_tip"></div>
 </div>
 */
@@ -597,7 +597,7 @@ jQuery.fn.extend({
 						
 					if( $obj.attr('data-multi_time_area')==='true' ){
 						(function(){
-							var __a_temp_TimeArea = $obj.attr('data-time-area-array').split('|');
+							var __a_temp_TimeArea = $obj.attr('data-time_area_array').split('|');
 							var len = __a_temp_TimeArea.length;
 													
 							for(var i = 0;i<len;i++){
