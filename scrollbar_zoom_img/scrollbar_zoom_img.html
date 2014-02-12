@@ -11,7 +11,7 @@
 
 <body>
 <div class="page_wrap">
-	<h1>image scroll zoom</h1>
+	<!--<h1>image scroll zoom</h1>-->
 	<!-- START gallery -->
 	<div class="scroll_zoom_gallery js_scroll_zoom_img">
 		<div class="window">
@@ -22,7 +22,7 @@
 			<div class="bar js_bar">
 				<div class="track js_track">
 					<div class="bar_dot js_bar_dot">
-						<div></div>
+						<span></span>
 					</div>
 				</div>
 			</div>
@@ -51,80 +51,68 @@
 				var $track = $root.find('.js_track');
 				var $bar_dot = $root.find('.js_bar_dot');
 				
-				var stage_w = $stage.width();
-				var stage_h = $stage.height();
-				
 				var $win = jQuery(window);
 				
-				var size_max = 2000;
-				var size_min = 500;			
+				var stage_w = $stage.width();
+				var stage_h = $stage.height();
 				var track_height = $track.height();
 				
-				/*
-				
-				resize_to(pct,_x,_y)
-				set_bar_to(pct)
-				reset_img()
+				var SIZE_MAX = 2000;//图片为方形 
+				var SIZE_MIN = 500;						
+				var cur_pct = 0;	
 				
 				
-				*/
+				var flag_barDotStartDrag = false;	
+				var flag_stageStartMove = false;
+				var img_ox,img_oy; 	
+
+				var oGV = {};
 				
 				
 				
-				//START function resize_to(pct,_x,_y)
-				var resize_to = function( pct,_x,_y ){
-					var x = _x || stage_w/2;
-					var y = _y || stage_h/2;
-					var tar_size = parseInt( ( size_max - size_min ) * (pct/100) + size_min );
+				//START function resize_img(pct)
+				var resize_img = function( pct ){  //放大缩小时，保持图片的中心点不变
+									
+					var tar_size = parseInt( ( SIZE_MAX - SIZE_MIN ) * (pct/100) + SIZE_MIN );  //图片为方形
 					var cur_img_w = $stage_img.width();
-					var cur_img_h = $stage_img.height();
-					var cur_img_offset = $stage_img.offset();
-					var cur_stage_offset = $stage.offset();
-					
-					var img_2_stage_ox = cur_stage_offset.left - cur_img_offset.left;
-					var img_2_stage_oy = cur_stage_offset.top - cur_img_offset.top;
-					
-					var a_2_img_ox = img_2_stage_ox + x;
-					var a_2_img_oy = img_2_stage_oy + y;
-					
-					var a_2_img_oxp = a_2_img_ox/cur_img_w;
-					var a_2_img_oyp = a_2_img_oy/cur_img_h;
-					
-					var tar_img_ox = tar_size * a_2_img_oxp;
-					var tar_img_oy = tar_size * a_2_img_oyp;
-					
-					var tar_img_2_stage_ox = tar_img_ox - x;
-					var tar_img_2_stage_oy = tar_img_oy - y;
-					
-					//var tar_img_x = cur_stage_offset.left - tar_img_2_stage_ox;
-					//var tar_img_y = cur_stage_offset.top - tar_img_2_stage_oy;
+					var cur_img_h = $stage_img.height();					
+					var cur_img_postion = $stage_img.position();                    
+					var x0 =  cur_img_postion.left + cur_img_w/2;
+					var y0 = cur_img_postion.top + cur_img_h/2;
 					
 					$stage_img.css({
 						'width':tar_size,
 						'height':tar_size,
-						'left':-tar_img_2_stage_ox,
-						'top':-tar_img_2_stage_oy
+						'left':x0 - tar_size/2,
+						'top':y0 - tar_size/2
 					});
 					
-				}//END function resize_to(pct,_x,_y)
+				}//END function resize_img(pct)
+				
+				
 				
 				//START function set_bar_to(pct)
 				var set_bar_to = function(pct){
 					pct = parseInt(pct);
 					pct = pct > 100 ? 100:pct;
 					pct = pct < 0 ? 0 :pct;
-					var apx = (100 - pct)*track_height/100;
+					var apx = track_height*(100 - pct)/100;
+					
 					$bar_dot.css({
 						'top':apx+'px'
 					})
 					$bar_dot.data('pct',pct);
+					$bar_dot.attr('data-pct',pct);
+					
+					cur_pct = pct;
+					
 				}//END function set_bar_to(pct)
 				
 				//START function reset_img()
 				var reset_img = function(){
-					$stage_img.width(size_min).height(size_min);
-					var left = ( stage_w - size_min ) / 2;
-					var top = ( stage_h - size_min ) / 2;
+					$stage_img.width(SIZE_MIN).height(SIZE_MIN);
+					var left = ( stage_w - SIZE_MIN ) / 2;
+					var top = ( stage_h - SIZE_MIN ) / 2;
 					$stage_img.css({
 						'left':left,
 						'top':top
@@ -132,64 +120,74 @@
 					set_bar_to(0);
 				}//END function reset_img()
 				
-				
-				var bar_dot_moy;
-				var bar_dot_start_drag = false;
-				
-				$bar_dot.on('mousedown',function(e){
-					var bar_dot_oy = $bar_dot.offset().top;
-					var bar_dot_my = e.pageY;
-					bar_dot_moy = bar_dot_my - bar_dot_oy;
-					bar_dot_start_drag = true;
+
+				$bar_dot.on('mousedown',function(e){	
+					console.log( ($track.offset().top ),e.pageY);		
+										
+					flag_barDotStartDrag = true;
 					e.preventDefault();
 					return false;
 				});
 		
 				$bar.on('mouseup mouseenter',function(e){
-					bar_dot_start_drag = false;
+					flag_barDotStartDrag = false;
 				});
 				
 				$bar.on('mousemove',function(e){
-					if( bar_dot_start_drag ){
+					if( flag_barDotStartDrag ){
 						var track_oy = $track.offset().top;
-						var my = e.pageY;
-						var dot_tar_y = my + 0;						
+						var my = e.pageY;						
+						var mouse_on_dot_vertical_distance = parseInt(my) - track_oy;
+						var dot_tar_y = my + 0;	
+						
+											
+						mouse_on_dot_vertical_distance = mouse_on_dot_vertical_distance > track_height ? track_height : mouse_on_dot_vertical_distance;
+						mouse_on_dot_vertical_distance = mouse_on_dot_vertical_distance < 0 ? 0 : mouse_on_dot_vertical_distance;
+						
+						console.log(mouse_on_dot_vertical_distance);	
+						
+						
+						
+						/*
+						
+										
 						var dot_tar_offset = parseInt(dot_tar_y) - parseInt(track_oy);
 						
 						if ( dot_tar_offset >=0 && dot_tar_offset<=track_height ){
-							/*
-							$bar_dot.css({
-								'top':dot_tar_offset
-							})
-							*/
 							var pct = parseInt( dot_tar_offset*100/track_height ) || 0;
 							var apct = 100-pct;
 							set_bar_to(apct);
-							resize_to(apct);
+							resize_img(apct);
 						}
+						
+						*/
+						
+							var pct = parseInt((mouse_on_dot_vertical_distance/track_height)*100);
+							var apct = 100-pct;
+							set_bar_to(apct);
+							resize_img(apct);
+							
+							
 						e.preventDefault();
 					}
 				});
-		
-		
-				var stage_start_move = false;
-				var img_ox,img_oy; 
+
 				
 				$stage_img.on('mousedown',function(e) {
 					var img_offset = $stage_img.offset();
 					img_ox = img_offset.left - e.pageX;
 					img_oy = img_offset.top - e.pageY;
-					stage_start_move = true;
+					flag_stageStartMove = true;
 					e.preventDefault();
 				});
 				
 				$stage.on('mouseup mouseenter',function(){
-					stage_start_move = false;
+					flag_stageStartMove = false;
 				});
 				
 				
 				$stage.on('mousemove',function(e){
-					if( stage_start_move ){
+					if( flag_stageStartMove ){
 						var stage_offset = $stage.offset();
 						
 						var tar_img_x = e.pageX + img_ox - stage_offset.left;
@@ -209,7 +207,7 @@
 					var next_pct = cur_pct+10;
 					next_pct = next_pct >100 ?100 :next_pct;
 					set_bar_to(next_pct);
-					resize_to(next_pct);
+					resize_img(next_pct);
 				});
 				
 				$btn_minus.on('click',function(){
@@ -219,26 +217,32 @@
 					var next_pct = cur_pct-10;
 					next_pct = next_pct < 0  ? 0 :next_pct;
 					set_bar_to(next_pct);
-					resize_to(next_pct);
+					resize_img(next_pct);
 				});		
 				
 				
 				// mouse wheel init				
 				$stage.on('mousewheel',function(e,d){
-					var cur_pct = $bar_dot.data('pct');
-					var next_pct = cur_pct+d*3;
-					next_pct = next_pct >100 ?100 :next_pct;
-					next_pct = next_pct <0 ?0 :next_pct;
-					set_bar_to(next_pct);
+					//console.log(e);
 					
-					var stage_offset = $stage.offset();
-					var mx = e.pageX - stage_offset.left;
-					var my = e.pageY - stage_offset.top;
-					resize_to(next_pct,mx,my);
+					var cur_pct = $bar_dot.data('pct');
+					/*每次滚动，运动的距离 100的总百分，分成10段 */
+					var step_size =10; //step_size 的大小决定了滚轮运动时 放大缩小的倍数
+					var step_distance = 100/step_size;					
+					var next_pct = d>0? (cur_pct + step_distance ):(cur_pct - step_distance);
+					
+					next_pct = next_pct >100 ?100 :next_pct;
+					next_pct = next_pct <0 ?0 :next_pct;					
+					cur_pct = next_pct;	
+									
+					set_bar_to(cur_pct);
+					resize_img(cur_pct);
 					return false;
 				});
-						
 				
+				//init
+				reset_img();
+						
 		  });
 	
 	

@@ -1,0 +1,148 @@
+@charset "utf-8";
+/* CSS Document */
+/* font : Conv_NoaLTCom-Regular */
+@font-face {
+ font-family: 'Conv_NoaLTCom-Regular';
+ src: url('../font/en/NoaLTCom-Regular/NoaLTCom-Regular.eot');
+ src: local('☺'), url('../font/en/NoaLTCom-Regular/NoaLTCom-Regular.woff') format('woff'), url('../font/en/NoaLTCom-Regular/NoaLTCom-Regular.ttf') format('truetype'), url('../font/en/NoaLTCom-Regular/NoaLTCom-Regular.svg') format('svg');
+ font-weight: normal;
+ font-style: normal;
+}
+/* font : Conv_NoaLTStd-BoldTab */
+@font-face {
+ font-family: 'Conv_NoaLTStd-BoldTab';
+ src: url('../font/en/NoaLTStd-BoldTab/NoaLTStd-BoldTab.eot');
+ src: local('☺'), url('../font/en/NoaLTStd-BoldTab/NoaLTStd-BoldTab.woff') format('woff'), url('../font/en/NoaLTStd-BoldTab/NoaLTStd-BoldTab.ttf') format('truetype'), url('../font/en/NoaLTStd-BoldTab/NoaLTStd-BoldTab.svg') format('svg');
+ font-weight: normal;
+ font-style: normal;
+}
+/* font : Conv_NoaLTStd-Light */
+@font-face {
+ font-family: 'Conv_NoaLTStd-Light';
+ src: url('../font/en/NoaLTStd-Light/NoaLTStd-Light.eot');
+ src: local('☺'), url('../font/en/NoaLTStd-Light/NoaLTStd-Light.woff') format('woff'), url('../font/en/NoaLTStd-Light/NoaLTStd-Light.ttf') format('truetype'), url('../font/en/NoaLTStd-Light/NoaLTStd-Light.svg') format('svg');
+ font-weight: normal;
+ font-style: normal;
+}
+/* font : Geotica2012-Regular */
+@font-face {
+ font-family: 'Geotica2012-Regular';
+ src: url('../font/en/Geotica2012-Regular/Geotica2012-Regular.eot');
+ src: local('☺'), url('../font/en/Geotica2012-Regular/Geotica2012-Regular.woff') format('woff'), url('../font/en/Geotica2012-Regular/Geotica2012-Regular.ttf') format('truetype'), url('../font/en/Geotica2012-Regular/Geotica2012-Regular.svg') format('svg');
+ font-weight: normal;
+ font-style: normal;
+}
+
+html {
+  -webkit-text-size-adjust: none;
+}/* fix chrome 12px */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+pre{
+display:block;	
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after, q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+table th, table td {
+}
+body {
+	font-family:'微软雅黑',Verdana, Geneva, sans-serif;
+  font-size: 12px;
+  line-height: 1.5em;
+  color:#fff;
+  background-color:#000;
+}
+input, select, textarea {
+  font-size:12px;
+  line-height:18px;
+  vertical-align:middle;
+  padding:0px;
+  margin:0px;
+  overflow:hidden;
+  font-size:100%;
+  display:inline-block;
+}
+button, input, select, label {
+    vertical-align: middle;
+      display:inline-block;
+}
+h1, h2, h3, h4, h5, h6 {
+	color: #A27079;
+	margin-bottom:0.5em;
+  font-weight:normal;
+    font-family:'Conv_NoaLTStd-Light';
+    	line-height:1.2em;
+}
+h1 {
+  font-size: 80px;
+
+}
+h2 {
+  font-size:60px;
+}
+h3 {
+    font-size:30px;
+}
+h4 {
+  font-size: 1.667em;
+}
+h5 {
+  font-size: 1em;
+}
+h6 {
+  font-size: 0.833em;
+}
+h1, h2, h3, h4, h5, h6, p {
+  margin-bottom: 10px;
+}
+em{
+  font-style:normal;
+  
+  }
+
+a {
+	text-decoration:none;
+	color:#8C6B48;
+	
+}
+a:hover {
+	color: #cda865;
+}
+ol li {
+	list-style-type:decimal;
+	list-style-position:inside;
+}
+ul, ol, dl {
+	list-style-image:none;
+	list-style-type:none;
+}
+
+pre{
+padding:10px;
+border:1px solid #fff;
+margin-bottom:20px; 
+border-radius: 10px;
+-moz-border-radius: 10px;
+-khtml-border-radius: 10px;
+-webkit-border-radius: 10px;
+}
+/* END CSS RESET */
