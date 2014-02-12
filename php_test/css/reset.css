@@ -1,0 +1,79 @@
+@charset "utf-8";
+/* CSS Document */
+html {
+	-webkit-text-adjust:none;
+}
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, figure {
+	margin:0;
+	padding:0;
+}
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+	display:block
+}
+ul {
+	list-style:none;
+}
+table {
+	border-collapse:separate;
+	border-spacing:0;
+}
+img {
+	border:0;
+}
+html {
+	font-size:125%;
+}
+body {
+	overflow-x:hidden;
+	overflow-y:scroll;
+	font-family:Georgia, "Times New Roman", Times,'微软雅黑', serif;
+	font-size:14px;
+	color:#444;
+	border-top:3px solid #444;
+	background-color:#e4e6e5;
+	overflow-x:hidden;
+}
+body.b2 {
+	background-color:#ececec;
+}
+a {
+	color:#409f89;
+	text-decoration:none;
+	-webkit-transition:color .25s ease-out;
+	-moz-transition:color .25s ease-out;
+	-o-transition:color .25s ease-out;
+	transition:color .25s ease-out;
+}
+a:hover {
+	color:#444;
+	text-decoration:none;
+}
+h1, h2, h3, h4, h5 {
+	margin-bottom:20px;
+	font-weight:normal;
+	line-height:170%;
+}
+h1 {
+	font-size:2.5em;
+}
+h2 {
+	font-size:1.8em;
+}
+h3 {
+	font-size:1.3em;
+}
+h4 {
+	margin-bottom:20px;
+	font-size:.9em;
+	font-weight:normal;
+}
+h5 {
+	font-size:1em;
+}
+p, blockquote {
+	margin-bottom:20px;
+	line-height:170%;
+}
+input[type=submit] {
+	-webkit-appearance:none;
+}

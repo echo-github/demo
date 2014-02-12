@@ -1,0 +1,23 @@
+@charset "utf-8";
+
+*{
+	margin:0;
+	padding:0;	
+}
+body {
+	background:url(../images/linen.png) left top repeat;
+}
+.rc_wrap {
+	position:relative;
+	width:100%;
+	height:100%;
+}
+.rc_wrap .rainmen {
+	position:absolute;
+	top:-370px;
+	width:220px;
+	height:370px;
+	background:url(../images/rain.png) left top no-repeat;
+		/*-webkit-transform:scale(0.5,0.4) rotate(30deg) translate(10px,20px);*/
+		
+}

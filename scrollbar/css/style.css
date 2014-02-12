@@ -1,0 +1,192 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* -------------------------  START reset -------------------------  */
+
+html {
+	-webkit-text-adjust:none;
+}
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, figure {
+	margin:0;
+	padding:0;
+}
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+	display:block
+}
+ul {
+	list-style:none;
+}
+table {
+	border-collapse:separate;
+	border-spacing:0;
+}
+img {
+	border:0;
+}
+html {
+	font-size:125%;
+}
+body {
+	overflow-x:hidden;
+	overflow-y:scroll;
+	font-family:Georgia, "Times New Roman", Times, '微软雅黑', serif;
+	font-size:14px;
+	color:#444;
+	background-color:#fff;
+	overflow-x:hidden;
+}
+body.b2 {
+	background-color:#ececec;
+}
+a {
+	color:#409f89;
+	text-decoration:none;
+	-webkit-transition:color .25s ease-out;
+	-moz-transition:color .25s ease-out;
+	-o-transition:color .25s ease-out;
+	transition:color .25s ease-out;
+}
+a:hover {
+	color:#444;
+	text-decoration:none;
+}
+h1, h2, h3, h4, h5 {
+	margin-bottom:20px;
+	font-weight:normal;
+	line-height:170%;
+}
+h1 {
+	font-size:2.5em;
+}
+h2 {
+	font-size:1.8em;
+}
+h3 {
+	font-size:1.3em;
+}
+h4 {
+	margin-bottom:20px;
+	font-size:.9em;
+	font-weight:normal;
+}
+h5 {
+	font-size:1em;
+}
+p, blockquote {
+	margin-bottom:20px;
+	line-height:170%;
+}
+input[type=submit] {
+	-webkit-appearance:none;
+}
+/* -------------------------  end reset -------------------------  */
+
+.page_wrap {
+	width:1000px;
+	margin:0 auto;
+	min-height:800px;
+}
+.scroll_zoom_gallery {
+	width:1000px;
+	margin:0 auto;
+	height:500px;
+	position:relative;
+}
+.scroll_zoom_gallery .window {
+	width:500px;
+	height:100%;
+	position:absolute;
+	left:0px;
+	top:0px;
+	background-color:#f00;
+	border:10px solid #ccc;overflow:hidden;
+	
+}
+.scroll_zoom_gallery .window .stage {
+	width:100%;
+	height:100%;
+	background-color:#0F0;
+	
+}
+.scroll_zoom_gallery .window .stage img {
+	width:500px;
+	position:absolute;
+	cursor: move;
+}
+.scroll_zoom_gallery .control {
+	width:60px;
+	height:310px;
+	position:absolute;
+	right:0px;
+	top:0px;
+
+}
+.scroll_zoom_gallery .control .btn_plus a {
+	position:absolute;
+	display:block;
+	width:20px;
+	height:0px;
+	padding-top:20px;
+	overflow:hidden;
+	left:20px;
+	top:0px;
+	background-image:url(../images/control_btns.png);
+	background-repeat:no-repeat;
+	background-position:left top;
+}
+.scroll_zoom_gallery .control .btn_plus a:hover {
+	background-position:left -30px;
+}
+.scroll_zoom_gallery .control .btn_minus a {
+	position:absolute;
+	display:block;
+	width:20px;
+	height:0px;
+	padding-top:20px;
+	overflow:hidden;
+	left:20px;
+	bottom:0px;
+	background-image:url(../images/control_btns.png);
+	background-repeat:no-repeat;
+	background-position:left -120px;
+}
+.scroll_zoom_gallery .control .btn_minus a:hover {
+	background-position:left -150px;
+}
+.scroll_zoom_gallery .control .bar {
+	position:absolute;
+	left:50%;
+	margin-left:-10px;
+	top:25px;
+	width:20px;
+	height: 260px;
+	overflow: hidden;
+	background-image: url(../images/control_bar.png);
+	background-repeat: no-repeat;
+	background-position: center top;
+}
+.scroll_zoom_gallery .control .bar .track {
+	height: 240px;
+	position: relative;
+}
+.scroll_zoom_gallery .control .bar .bar_dot {
+	position: absolute;
+	left: 0;
+	top: 100%;
+	display: block;
+	height: 20px;
+	width: 100%;
+
+}
+.scroll_zoom_gallery .control .bar .bar_dot div {
+	height: 0;
+	padding-top: 20px;
+	width:20px;
+	overflow: hidden;
+	background-image: url(../images/control_btns.png);
+	background-repeat: no-repeat;
+	background-position: center -60px;
+	overflow: hidden;
+	display: block;
+	cursor: pointer;
+}
