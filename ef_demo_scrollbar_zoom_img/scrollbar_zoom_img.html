@@ -75,9 +75,7 @@
 					var cur_img_w = $stage_img.width();
 					var cur_img_h = $stage_img.height();
 					
-					
-									
-					var cur_img_postion = $stage_img.position(); 
+					var cur_img_postion = $stage_img.position();
 					
 					var x0 =  cur_img_postion.left + cur_img_w/2;
 					var y0 = cur_img_postion.top + cur_img_h/2;
@@ -89,9 +87,6 @@
 						'left':x0 - tar_size/2,
 						'top':y0 - tar_size/2
 					});	
-					
-					
-					//console.log('cur_size=' + tar_size + ', 当前图片中心点=' + tar_size);	
 					
 									
 				}//END function resize_img(pct)
@@ -132,7 +127,6 @@
 
 
 
-
 				$bar_dot.on('mousedown',function(e){										
 					flag_barDotStartDrag = true;
 					e.preventDefault();
@@ -156,15 +150,10 @@
 						var apct = barStepRange-pct;
 						
 						
-						
-						apct = Math.round(apct/stepSize) * stepSize;
-						
-						apct = apct > barStepRange ? barStepRange : apct;
-						
+						apct = Math.round(apct/stepSize) * stepSize;						
+						apct = apct > barStepRange ? barStepRange : apct;						
 						cur_pct = apct;	
 						
-						
-								
 						set_bar_to(cur_pct);
 						resize_img(cur_pct);
 						e.preventDefault();
@@ -203,7 +192,6 @@
 				// mouse wheel init				
 				$stage.on('mousewheel',function(e,d){
 					var cur_pct = $bar_dot.data('pct');
-					/*每次滚动，运动的距离 100的总百分，分成10段 */
 
 					var step_distance = barStepRange/stepSize;					
 					var next_pct = d>0? (cur_pct + step_distance ):(cur_pct - step_distance);
