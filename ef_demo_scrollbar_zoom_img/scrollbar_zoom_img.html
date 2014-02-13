@@ -1,0 +1,241 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>imgae zoom scrollbar</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.mousewheel.js"></script>
+<style></style>
+</head>
+
+<body>
+<div class="page_wrap">
+	<!--<h1>image scroll zoom</h1>-->
+	<!-- START gallery -->
+	<div class="scroll_zoom_gallery js_scroll_zoom_img">
+		<div class="window">
+			<div class="stage js_stage"><img src="images/demo_pic_l.jpg" alt="" /></div>
+		</div>
+		<div class="control">
+			<div class="btn_plus js_plus"><a href="javascript:;">放大</a></div>
+			<div class="bar js_bar">
+				<div class="track js_track">
+					<div class="bar_dot js_bar_dot">
+						<span></span>
+					</div>
+				</div>
+			</div>
+			<div class="btn_minus js_minus"><a href="javascript:;">缩小</a></div>
+		</div>
+	</div>
+	<!-- END gallery --> 
+
+	</div>
+	
+	
+	<script type="text/javascript">
+	jQuery(function(){
+		
+			var IE6 = (window.XMLHttpRequest == undefined) && (ActiveXObject != undefined);
+			var IE7 = (typeof document.addEventListener != 'function' && window.XMLHttpRequest && typeof document.querySelector =="undefined") ? true : false;
+
+		
+			//init js_scroll_zoom_img
+			jQuery('.js_scroll_zoom_img').each(function(index, element) {
+				var $root = jQuery(this);
+				var $stage = $root.find('.js_stage');
+				var $stage_img = $stage.find('img');
+				var $btn_plus = $root.find('.js_plus');
+				var $btn_minus = $root.find('.js_minus');				
+				
+				var $bar = $root.find('.js_bar');
+				var $track = $root.find('.js_track');
+				var $bar_dot = $root.find('.js_bar_dot');
+				
+				var $win = jQuery(window);
+				
+				var stage_w = $stage.width();
+				var stage_h = $stage.height();
+				var track_height = $track.height();
+				
+				var SIZE_MAX = 2000;//图片为方形 
+				var SIZE_MIN = 500;						
+				var cur_pct = 0;	
+				
+				
+				var flag_barDotStartDrag = false;	
+				var flag_stageStartMove = false;
+				var img_ox,img_oy; 	
+
+				var oGV = {};
+				
+				
+				
+				//START function resize_img(pct)
+				var resize_img = function( pct ){  //放大缩小时，保持图片的中心点不变
+									
+					var tar_size = parseInt( ( SIZE_MAX - SIZE_MIN ) * (pct/100) + SIZE_MIN );  //图片为方形
+					var cur_img_w = $stage_img.width();
+					var cur_img_h = $stage_img.height();
+					console.log(cur_img_w,cur_img_h);	
+									
+					var cur_img_postion = $stage_img.position();   
+					                 
+					var x0 =  cur_img_postion.left + cur_img_w/2;
+					var y0 = cur_img_postion.top + cur_img_h/2;
+					
+					$stage_img.css({
+						'width':tar_size,
+						'height':tar_size,
+						'left':x0 - tar_size/2,
+						'top':y0 - tar_size/2
+					});
+					
+				}//END function resize_img(pct)
+				
+				
+				
+				//START function set_bar_to(pct)
+				var set_bar_to = function(pct){
+					pct = parseInt(pct);
+					pct = pct > 100 ? 100:pct;
+					pct = pct < 0 ? 0 :pct;
+					var apx = track_height*(100 - pct)/100;
+					
+					$bar_dot.css({
+						'top':apx+'px'
+					})
+					$bar_dot.data('pct',pct);
+					$bar_dot.attr('data-pct',pct);
+					
+					cur_pct = pct;
+					
+				}//END function set_bar_to(pct)
+				
+				//START function reset_img()
+				var reset_img = function(){
+					$stage_img.width(SIZE_MIN).height(SIZE_MIN);
+					var left = ( stage_w - SIZE_MIN ) / 2;
+					var top = ( stage_h - SIZE_MIN ) / 2;
+					$stage_img.css({
+						'left':left,
+						'top':top
+					})
+					set_bar_to(0);
+				}//END function reset_img()
+				
+
+				$bar_dot.on('mousedown',function(e){
+										
+					flag_barDotStartDrag = true;
+					e.preventDefault();
+					return false;
+				});
+		
+				$bar.on('mouseup mouseenter',function(e){
+					flag_barDotStartDrag = false;
+				});
+				
+				$bar.on('mousemove',function(e){
+					if( flag_barDotStartDrag ){
+						var track_oy = $track.offset().top;
+						var my = e.pageY;						
+						var mouse_on_dot_vertical_distance = parseInt(my) - track_oy;
+										
+						mouse_on_dot_vertical_distance = mouse_on_dot_vertical_distance > track_height ? track_height : mouse_on_dot_vertical_distance;
+						mouse_on_dot_vertical_distance = mouse_on_dot_vertical_distance < 0 ? 0 : mouse_on_dot_vertical_distance;
+					
+
+						var pct = parseInt((mouse_on_dot_vertical_distance/track_height)*100);
+						var apct = 100-pct;
+						
+						cur_pct = apct;	
+						
+						//console.log(cur_pct);		
+								
+						set_bar_to(cur_pct);
+						resize_img(cur_pct);
+						e.preventDefault();
+					}
+				});
+
+				
+				$stage_img.on('mousedown',function(e) {
+					var img_offset = $stage_img.offset();
+					img_ox = img_offset.left - e.pageX;
+					img_oy = img_offset.top - e.pageY;
+					flag_stageStartMove = true;
+					e.preventDefault();
+				});
+				
+				$stage.on('mouseup mouseenter',function(){
+					flag_stageStartMove = false;
+				});
+				
+				
+				$stage.on('mousemove',function(e){
+					if( flag_stageStartMove ){
+						var stage_offset = $stage.offset();
+						
+						var tar_img_x = e.pageX + img_ox - stage_offset.left;
+						var tar_img_y = e.pageY + img_oy - stage_offset.top;
+						
+						$stage_img.css({
+							'left':tar_img_x,
+							'top':tar_img_y
+						})
+						e.preventDefault();
+					}
+				});
+				
+				$btn_plus.on('click',function(){
+					var $this_btn = jQuery(this);
+					var cur_pct = $bar_dot.data('pct');
+					var next_pct = cur_pct+10;
+					next_pct = next_pct >100 ?100 :next_pct;
+					set_bar_to(next_pct);
+					resize_img(next_pct);
+				});
+				
+				$btn_minus.on('click',function(){
+				
+					var $this_btn = jQuery(this);
+					var cur_pct = $bar_dot.data('pct');
+					var next_pct = cur_pct-10;
+					next_pct = next_pct < 0  ? 0 :next_pct;
+					set_bar_to(next_pct);
+					resize_img(next_pct);
+				});		
+				
+				
+				// mouse wheel init				
+				$stage.on('mousewheel',function(e,d){
+					//console.log(e);
+					
+					var cur_pct = $bar_dot.data('pct');
+					/*每次滚动，运动的距离 100的总百分，分成10段 */
+					var step_size =10; //step_size 的大小决定了滚轮运动时 放大缩小的倍数
+					var step_distance = 100/step_size;					
+					var next_pct = d>0? (cur_pct + step_distance ):(cur_pct - step_distance);
+					
+					next_pct = next_pct >100 ?100 :next_pct;
+					next_pct = next_pct <0 ?0 :next_pct;					
+					cur_pct = next_pct;	
+									
+					set_bar_to(cur_pct);
+					resize_img(cur_pct);
+					return false;
+				});
+				
+				//init
+				reset_img();
+						
+		  });
+	
+	
+	})
+	
+	</script>
+</body>
+</html>
