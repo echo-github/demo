@@ -1,9 +1,0 @@
-/* Bebas Neue
----------------------------------------- */
-
-/* font : Conv_NoaLTStd-Light */
-@font-face {
- font-family: 'Conv_NoaLTStd-Light';
- src: url('../font/NoaLTStd-Light/NoaLTStd-Light.eot');
- src: url('../font/NoaLTStd-Light/NoaLTStd-Light.woff') format('woff'), url('../font/NoaLTStd-Light/NoaLTStd-Light.ttf') format('truetype'), url('../font/NoaLTStd-Light/NoaLTStd-Light.svg') format('svg');
-}
